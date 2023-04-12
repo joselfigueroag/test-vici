@@ -46,22 +46,31 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        return response()->json($product, 200);
+        $product = Product::find($id);
+        if($product){
+            return response()->json($product, 200);
+        } else {
+            return response()->json("Producto no existe", 400);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
-        $product->name = $request->has('name') ? $request->get('name') : $product->name;
-        $product->brand = $request->has('brand') ? $request->get('brand') : $product->brand;
-        $product->client = $request->has('client') ? $request->get('client') : $product->client;
-        $product->update();
-
-        return response()->json($product, 200);
+        $product = Product::find($id);
+        if($product){
+            $product->name = $request->has('name') ? $request->get('name') : $product->name;
+            $product->brand = $request->has('brand') ? $request->get('brand') : $product->brand;
+            $product->client = $request->has('client') ? $request->get('client') : $product->client;
+            $product->update();
+            return response()->json($product, 200);
+        } else {
+            return response()->json("Producto no existe", 400);
+        }
     }
 
     /**
